@@ -2,20 +2,29 @@ package main
 
 import (
 	"fmt"
+	"google.golang.org/protobuf/proto"
+	"io/ioutil"
+	"log"
+	pb "protoBufPlay/github.com/protocolbuffers/protobuf/examples/go/tutorialpb"
 )
 
-//TIP <p>To run your code, right-click the code and select <b>Run</b>.</p> <p>Alternatively, click
-// the <icon src="AllIcons.Actions.Execute"/> icon in the gutter and select the <b>Run</b> menu item from here.</p>
-
 func main() {
-	//TIP <p>Press <shortcut actionId="ShowIntentionActions"/> when your caret is at the underlined text
-	// to see how GoLand suggests fixing the warning.</p><p>Alternatively, if available, click the lightbulb to view possible fixes.</p>
-	s := "gopher"
-	fmt.Printf("Hello and welcome, %s!\n", s)
 
-	for i := 1; i <= 5; i++ {
-		//TIP <p>To start your debugging session, right-click your code in the editor and select the Debug option.</p> <p>We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-		// for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.</p>
-		fmt.Println("i =", 100/i)
+	person := &pb.Person{
+		Id:    1234,
+		Name:  "John Doe",
+		Email: "jdoe@example.com",
+		Phones: []*pb.Person_PhoneNumber{
+			{Number: "555-4321", Type: pb.Person_MOBILE},
+		},
 	}
+
+	fmt.Printf("Person, %s!\n", person)
+
+	out, _ := proto.Marshal(person)
+
+	if err := ioutil.WriteFile("/Users/pavel/devcore/GoLang/protoBufPlay/data/person.dat", out, 0644); err != nil {
+		log.Fatalln("Failed to write address book:", err)
+	}
+
 }
